@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +9,31 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body style="background: linear-gradient(135deg, #667eea, #764ba2); min-height:100vh;">
+<body id="pageBody"
+      style="background: linear-gradient(135deg, #667eea, #764ba2); min-height:100vh;">
+<div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded shadow-sm"
+     style="background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);">
 
-<div class="container py-5">
+    <!-- 👤 User -->
+    <h5 class="m-0 fw-bold">
+        👋 Hello {{ request.user.username }}
+    </h5>
+
+    <!-- 🔘 Buttons -->
+    <div class="d-flex gap-2">
+
+        <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
+            🚪 Logout
+        </a>
+
+        <button onclick="toggleDark()" class="btn btn-dark btn-sm">
+            🌙 Dark Mode
+        </button>
+
+    </div>
+
+</div>
+
 
     <div class="card border-0 shadow-lg"
          style="background: rgba(255,255,255,0.92);
@@ -24,7 +47,9 @@
             </h1>
 
             <p class="text-center text-secondary fs-5 mb-4">
-                سلام پوریا 👋
+
+               👋 Do your tasks properly. {{ request.user.username }} 😎
+
             </p>
 
             <!-- آمار -->
@@ -62,37 +87,26 @@
             <!-- جستجو -->
             <form method="GET" class="mb-4">
                 <div class="input-group">
-                    <input
-                        type="text"
-                        name="search"
-                        class="form-control"
-                        placeholder="جستجوی کارها..."
-                    >
+                    <input type="text" name="search" class="form-control" placeholder="جستجوی کارها...">
                     <button class="btn btn-dark" type="submit">
                         🔍 جستجو
                     </button>
                 </div>
             </form>
 
+            <!-- افزودن -->
             <div class="text-center mb-4">
                 <a href="{% url 'add_task' %}" class="btn btn-success btn-lg">
                     ➕ اضافه کردن Task جدید
                 </a>
             </div>
 
+            <!-- فیلتر -->
             <div class="text-center mb-4">
 
-                <a href="/" class="btn btn-primary">
-                    همه کارها
-                </a>
-
-                <a href="/?filter=completed" class="btn btn-success">
-                    انجام شده‌ها
-                </a>
-
-                <a href="/?filter=pending" class="btn btn-secondary">
-                    انجام نشده‌ها
-                </a>
+                <a href="/" class="btn btn-primary">همه کارها</a>
+                <a href="/?filter=completed" class="btn btn-success">انجام شده‌ها</a>
+                <a href="/?filter=pending" class="btn btn-secondary">انجام نشده‌ها</a>
 
             </div>
 
@@ -102,56 +116,65 @@
 
             {% for task in tasks %}
 
-                <div class="card mb-3 border-0 shadow-sm">
-                    <div class="card-body d-flex justify-content-between align-items-center">
+            <div class="card mb-3 shadow-sm border-0">
 
-                        <div>
-                            {% if task.completed %}
-                                <span class="fs-5 text-success">
-                                    <s>✅ {{ task.title }}</s>
-                                </span>
-                            {% else %}
-                                <span class="fs-5">
-                                    {{ task.title }}
-                                </span>
-                            {% endif %}
-                        </div>
+                <div class="card-body d-flex justify-content-between align-items-center">
 
-                        <div>
+                    <div>
+                        {% if task.completed %}
+                            <span class="text-success">
+                                <s>✅ {{ task.title }}</s>
+                            </span>
+                        {% else %}
+                            <span>
+                                {{ task.title }}
+                            </span>
+                        {% endif %}
+                    </div>
 
-                            <a href="{% url 'toggle_complete' task.id %}"
-                               class="btn btn-success btn-sm">
-                                ✅
-                            </a>
+                    <div class="d-flex gap-2">
 
-                            <a href="{% url 'edit_task' task.id %}"
-                               class="btn btn-warning btn-sm">
-                                ✏️
-                            </a>
+                        <a href="{% url 'toggle_complete' task.id %}" class="btn btn-success btn-sm">✔</a>
 
-                            <a href="{% url 'delete_task' task.id %}"
-                               class="btn btn-danger btn-sm">
-                                ❌
-                            </a>
+                        <a href="{% url 'edit_task' task.id %}" class="btn btn-warning btn-sm">✏️</a>
 
-                        </div>
+                        <a href="{% url 'delete_task' task.id %}" class="btn btn-danger btn-sm">❌</a>
 
                     </div>
+
                 </div>
+            </div>
 
             {% empty %}
 
-                <div class="alert alert-info text-center">
-                    هیچ کاری ثبت نشده است.
-                </div>
+            <div class="alert alert-info text-center">
+                هیچ کاری وجود ندارد 😎
+            </div>
 
             {% endfor %}
 
         </div>
-
     </div>
 
 </div>
+
+<script>
+function toggleDark() {
+    let body = document.getElementById("pageBody");
+
+    if (body.classList.contains("dark")) {
+        body.classList.remove("dark");
+        body.style.background = "linear-gradient(135deg, #667eea, #764ba2)";
+        body.style.color = "black";
+        localStorage.setItem("darkMode", "off");
+    } else {
+        body.classList.add("dark");
+        body.style.background = "#121212";
+        body.style.color = "white";
+        localStorage.setItem("darkMode", "on");
+    }
+}
+</script>
 
 </body>
 </html>
