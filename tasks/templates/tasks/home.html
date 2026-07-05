@@ -3,65 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
+    <title>Task Manager | Pouria</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
 
-<div class="container mt-5">
+<body style="background: linear-gradient(135deg, #667eea, #764ba2); min-height:100vh;">
 
-    <div class="card shadow">
-        <div class="card-body">
+<div class="container py-5">
 
-            <h1 class="text-center mb-4">
-                سلام پوریا 👋
+    <div class="card border-0 shadow-lg"
+         style="background: rgba(255,255,255,0.92);
+                backdrop-filter: blur(10px);
+                border-radius: 25px;">
+
+        <div class="card-body p-5">
+
+            <h1 class="text-center mb-3 fw-bold display-4">
+                🚀 Task Manager
             </h1>
 
+            <p class="text-center text-secondary fs-5 mb-4">
+                سلام پوریا 👋
+            </p>
+
+            <!-- آمار -->
+            <div class="row text-center mb-4">
+
+                <div class="col-md-4 mb-2">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h5>📋 کل کارها</h5>
+                            <h2>{{ total_tasks }}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h5>✅ انجام شده</h5>
+                            <h2>{{ completed_tasks }}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body">
+                            <h5>⏳ انجام نشده</h5>
+                            <h2>{{ pending_tasks }}</h2>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- جستجو -->
+            <form method="GET" class="mb-4">
+                <div class="input-group">
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="جستجوی کارها..."
+                    >
+                    <button class="btn btn-dark" type="submit">
+                        🔍 جستجو
+                    </button>
+                </div>
+            </form>
+
             <div class="text-center mb-4">
-                <a href="{% url 'add_task' %}" class="btn btn-success">
+                <a href="{% url 'add_task' %}" class="btn btn-success btn-lg">
                     ➕ اضافه کردن Task جدید
                 </a>
             </div>
 
-            <h3 class="mb-3">لیست کارها</h3>
+            <div class="text-center mb-4">
+
+                <a href="/" class="btn btn-primary">
+                    همه کارها
+                </a>
+
+                <a href="/?filter=completed" class="btn btn-success">
+                    انجام شده‌ها
+                </a>
+
+                <a href="/?filter=pending" class="btn btn-secondary">
+                    انجام نشده‌ها
+                </a>
+
+            </div>
+
+            <hr>
+
+            <h3 class="mb-4">📋 لیست کارها</h3>
 
             {% for task in tasks %}
-                <div class="card mb-2">
+
+                <div class="card mb-3 border-0 shadow-sm">
                     <div class="card-body d-flex justify-content-between align-items-center">
 
-                        <span>
+                        <div>
                             {% if task.completed %}
-                                <s>✅ {{ task.title }}</s>
+                                <span class="fs-5 text-success">
+                                    <s>✅ {{ task.title }}</s>
+                                </span>
                             {% else %}
-                                {{ task.title }}
+                                <span class="fs-5">
+                                    {{ task.title }}
+                                </span>
                             {% endif %}
-                        </span>
+                        </div>
 
                         <div>
-                            <a href="{% url 'toggle_complete' task.id %}" class="btn btn-success btn-sm">
-                                ✅ انجام شد
+
+                            <a href="{% url 'toggle_complete' task.id %}"
+                               class="btn btn-success btn-sm">
+                                ✅
                             </a>
 
-                            <a href="{% url 'edit_task' task.id %}" class="btn btn-warning btn-sm">
-                                ✏️ ویرایش
+                            <a href="{% url 'edit_task' task.id %}"
+                               class="btn btn-warning btn-sm">
+                                ✏️
                             </a>
 
-                            <a href="{% url 'delete_task' task.id %}" class="btn btn-danger btn-sm">
-                                ❌ حذف
+                            <a href="{% url 'delete_task' task.id %}"
+                               class="btn btn-danger btn-sm">
+                                ❌
                             </a>
+
                         </div>
 
                     </div>
                 </div>
 
             {% empty %}
-                <div class="alert alert-info">
+
+                <div class="alert alert-info text-center">
                     هیچ کاری ثبت نشده است.
                 </div>
+
             {% endfor %}
 
         </div>
+
     </div>
 
 </div>

@@ -4,16 +4,32 @@ from .forms import TaskForm
 
 def home(request):
     filter_type = request.GET.get("filter")
+    search = request.GET.get("search")
+
+    tasks = Task.objects.all()
+
+    if search:
+        tasks = tasks.filter(title__icontains=search)
 
     if filter_type == "completed":
-        tasks = Task.objects.filter(completed=True)
+        tasks = tasks.filter(completed=True)
 
     elif filter_type == "pending":
-        tasks = Task.objects.filter(completed=False)
+        tasks = tasks.filter(completed=False)
 
-    else:
-        tasks = Task.objects.all()
+    total_tasks = Task.objects.count()
+    completed_tasks = Task.objects.filter(completed=True).count()
+    pending_tasks = Task.objects.filter(completed=False).count()
 
+    context = {
+        "tasks": tasks,
+        "total_tasks": total_tasks,
+        "completed_tasks": completed_tasks,
+        "pending_tasks": pending_tasks,
+    }
+
+    return render(request, "tasks/home.html", context)
+    return render(request, "tasks/home.html", context)
     return render(request, "tasks/home.html", {"tasks": tasks})
 def add_task(request):
     form = TaskForm()
