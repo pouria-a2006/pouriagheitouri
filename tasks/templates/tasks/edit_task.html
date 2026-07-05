@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ویرایش Task</title>
+</head>
+<body>
+
+<h1>ویرایش Task ✏️</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">ذخیره تغییرات</button>
+</form>
+
+<p>
+    <a href="{% url 'home' %}">بازگشت به صفحه اصلی</a>
+</p>
+
+</body>
+</html>
