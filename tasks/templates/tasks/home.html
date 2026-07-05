@@ -12,7 +12,10 @@
 <h2>لیست کارها</h2>
 
 {% for task in tasks %}
-    <p>✔ {{ task.title }}</p>
+    <p>
+        ✔ {{ task.title }}
+        <a href="{% url 'delete_task' task.id %}">❌ حذف</a>
+    </p>
 {% empty %}
     <p>هیچ کاری نیست</p>
 {% endfor %}
