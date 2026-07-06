@@ -1,7 +1,76 @@
-<h1>اضافه کردن Task</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task</title>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">ذخیره</button>
-</form>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-body p-4">
+
+            <h2 class="text-center mb-4">
+                Add New Task
+            </h2>
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+<div class="mb-3">
+    {{ form.title.label_tag }}
+    {{ form.title }}
+    {{ form.title.errors }}
+</div>
+
+<div class="mb-3">
+    {{ form.description.label_tag }}
+    {{ form.description }}
+    {{ form.description.errors }}
+</div>
+
+<div class="mb-3">
+    {{ form.priority.label_tag }}
+    {{ form.priority }}
+    {{ form.priority.errors }}
+</div>
+
+<div class="mb-3">
+    {{ form.due_date.label_tag }}
+    {{ form.due_date }}
+    {{ form.due_date.errors }}
+</div>
+
+<div class="mb-3">
+    {{ form.completed.label_tag }}
+    {{ form.completed }}
+    {{ form.completed.errors }}
+</div>
+
+                <button type="submit" class="btn btn-success">
+                    Save
+                </button>
+
+                <a href="{% url 'home' %}" class="btn btn-secondary">
+                    Back
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
