@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Task
 from .forms import TaskForm
+from datetime import date
 
 
 @login_required(login_url='login')
@@ -24,12 +25,25 @@ def home(request):
     total_tasks = tasks.count()
     completed_tasks = tasks.filter(completed=True).count()
     pending_tasks = tasks.filter(completed=False).count()
+    overdue_tasks = tasks.filter(
+    completed=False,
+    due_date__lt=date.today()
+    ).count()
+
+    progress = 0
+
+    if total_tasks > 0:
+        progress = int((completed_tasks / total_tasks) * 100)
+
+    
 
     context = {
         "tasks": tasks,
         "total_tasks": total_tasks,
         "completed_tasks": completed_tasks,
         "pending_tasks": pending_tasks,
+        "overdue_tasks": overdue_tasks,
+        "progress": progress,
     }
 
     return render(request, "tasks/home.html", context)
