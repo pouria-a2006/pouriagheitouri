@@ -44,6 +44,10 @@ def home(request):
         "pending_tasks": pending_tasks,
         "overdue_tasks": overdue_tasks,
         "progress": progress,
+        "user": request.user,
+        "member_since": request.user.date_joined,
+
+
     }
 
     return render(request, "tasks/home.html", context)
