@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.core.paginator import Paginator
 from .models import Task
 from .forms import TaskForm
 from datetime import date
@@ -11,31 +13,50 @@ def home(request):
     filter_type = request.GET.get("filter")
     search = request.GET.get("search")
 
+    # همه تسک‌های کاربر
     tasks = Task.objects.filter(user=request.user)
 
+    # جستجو
     if search:
         tasks = tasks.filter(title__icontains=search)
 
+    # فیلتر
     if filter_type == "completed":
         tasks = tasks.filter(completed=True)
 
     elif filter_type == "pending":
         tasks = tasks.filter(completed=False)
 
+    # آمار (قبل از صفحه‌بندی)
     total_tasks = tasks.count()
-    completed_tasks = tasks.filter(completed=True).count()
-    pending_tasks = tasks.filter(completed=False).count()
-    overdue_tasks = tasks.filter(
-    completed=False,
-    due_date__lt=date.today()
+
+    completed_tasks = tasks.filter(
+        completed=True
     ).count()
 
+    pending_tasks = tasks.filter(
+        completed=False
+    ).count()
+
+    overdue_tasks = tasks.filter(
+        completed=False,
+        due_date__lt=date.today()
+    ).count()
+
+    # درصد پیشرفت
     progress = 0
 
     if total_tasks > 0:
-        progress = int((completed_tasks / total_tasks) * 100)
+        progress = int(
+            (completed_tasks / total_tasks) * 100
+        )
 
-    
+    # Pagination
+    paginator = Paginator(tasks, 5)
+
+    page_number = request.GET.get("page")
+
+    tasks = paginator.get_page(page_number)
 
     context = {
         "tasks": tasks,
@@ -46,11 +67,13 @@ def home(request):
         "progress": progress,
         "user": request.user,
         "member_since": request.user.date_joined,
-
-
     }
 
-    return render(request, "tasks/home.html", context)
+    return render(
+        request,
+        "tasks/home.html",
+        context
+    )
 
 
 @login_required(login_url='login')
@@ -65,6 +88,10 @@ def add_task(request):
             task = form.save(commit=False)
             task.user = request.user
             task.save()
+
+            task.save()
+
+            messages.success(request, "Task added successfully ✅")
 
             return redirect('home')
 
@@ -88,6 +115,8 @@ def delete_task(request, task_id):
 
     task.delete()
 
+    messages.error(request, "Task deleted successfully 🗑️")
+
     return redirect('home')
 
 
@@ -102,6 +131,11 @@ def toggle_complete(request, task_id):
 
     task.completed = not task.completed
     task.save()
+
+    if task.completed:
+        messages.success(request, "Task completed 🎉")
+    else:
+        messages.warning(request, "Task marked as pending ⏳")
 
     return redirect('home')
 
@@ -123,7 +157,11 @@ def edit_task(request, task_id):
         )
 
         if form.is_valid():
+
             form.save()
+
+            messages.info(request, "Task updated successfully ✏️")
+
             return redirect('home')
 
     else:
