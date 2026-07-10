@@ -201,8 +201,4 @@ def edit_task(request, task_id):
 
 @login_required(login_url='login')
 def calendar_view(request):
-
-        return render(
-            request,
-            "tasks/calendar.html"
-    )
+    return render(request, "tasks/calendar.html")
