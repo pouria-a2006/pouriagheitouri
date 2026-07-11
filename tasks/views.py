@@ -202,3 +202,33 @@ def edit_task(request, task_id):
 @login_required(login_url='login')
 def calendar_view(request):
     return render(request, "tasks/calendar.html")
+from django.http import JsonResponse
+
+
+@login_required(login_url='login')
+def calendar_events(request):
+
+    tasks = Task.objects.filter(user=request.user)
+
+    events = []
+
+    for task in tasks:
+
+        if task.due_date:
+
+            color = "#198754"
+
+            if task.priority == "HIGH":
+                color = "#dc3545"
+
+            elif task.priority == "MEDIUM":
+                color = "#ffc107"
+
+            events.append({
+                "title": task.title,
+                "start": task.due_date.strftime("%Y-%m-%d"),
+                "url": f"/edit/{task.id}/",
+                "color": color,
+            })
+
+    return JsonResponse(events, safe=False)
