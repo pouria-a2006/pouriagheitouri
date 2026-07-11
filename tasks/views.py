@@ -43,7 +43,19 @@ def home(request):
     overdue_tasks = tasks.filter(
         completed=False,
         due_date__lt=date.today()
+    ).count()   
+
+    today_tasks = Task.objects.filter(
+        user=request.user,
+        completed=False,
+        due_date=date.today()
     ).count()
+
+
+
+
+
+
 
     # درصد پیشرفت
     progress = 0
@@ -91,6 +103,7 @@ def home(request):
         "member_since": request.user.date_joined,
         "greeting": greeting,
         "quote": quote,
+        "today_tasks": today_tasks,
 
     }
 

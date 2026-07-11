@@ -261,6 +261,31 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
             <hr>
 
+{% if today_tasks > 0 %}
+
+<div class="alert alert-info shadow-sm">
+
+    🔔 You have
+    <strong>{{ today_tasks }}</strong>
+    task(s) due today.
+
+</div>
+
+{% endif %}
+
+
+{% if overdue_tasks > 0 %}
+
+<div class="alert alert-danger shadow-sm">
+
+    ⚠️ You have
+    <strong>{{ overdue_tasks }}</strong>
+    overdue task(s).
+
+</div>
+
+{% endif %}
+
             <h3 class="mb-4">📋 Task List</h3>
 
             {% for task in tasks %}
