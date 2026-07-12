@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-body text-center">
+
+            <img src="https://ui-avatars.com/api/?name={{ request.user.username }}&background=0D6EFD&color=fff&size=150"
+                 class="rounded-circle mb-3">
+
+            <h2>{{ request.user.username }}</h2>
+
+            <p class="text-muted">
+
+                {{ request.user.email }}
+
+            </p>
+
+            <hr>
+
+            <div class="row mt-4">
+
+                <div class="col-md-3">
+
+                    <div class="card bg-primary text-white">
+
+                        <div class="card-body">
+
+                            <h5>Total</h5>
+
+                            <h2>{{ total_tasks }}</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card bg-success text-white">
+
+                        <div class="card-body">
+
+                            <h5>Completed</h5>
+
+                            <h2>{{ completed_tasks }}</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card bg-warning">
+
+                        <div class="card-body">
+
+                            <h5>Pending</h5>
+
+                            <h2>{{ pending_tasks }}</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card bg-danger text-white">
+
+                        <div class="card-body">
+
+                            <h5>Overdue</h5>
+
+                            <h2>{{ overdue_tasks }}</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="mt-5">
+
+                <h4>Progress</h4>
+
+                <div class="progress" style="height:30px;">
+
+                    <div class="progress-bar bg-success"
+
+                         style="width: {{ progress }}%;">
+
+                        {{ progress }}%
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="mt-5">
+
+                <a href="{% url 'home' %}"
+
+                   class="btn btn-primary">
+
+                    ← Back Home
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

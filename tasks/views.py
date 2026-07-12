@@ -245,3 +245,48 @@ def calendar_events(request):
             })
 
     return JsonResponse(events, safe=False)
+@login_required(login_url='login')
+def profile(request):
+
+    total_tasks = Task.objects.filter(
+        user=request.user
+    ).count()
+
+    completed_tasks = Task.objects.filter(
+        user=request.user,
+        completed=True
+    ).count()
+
+    pending_tasks = Task.objects.filter(
+        user=request.user,
+        completed=False
+    ).count()
+
+    overdue_tasks = Task.objects.filter(
+        user=request.user,
+        completed=False,
+        due_date__lt=date.today()
+    ).count()
+
+    progress = 0
+
+    if total_tasks > 0:
+        progress = int(
+            (completed_tasks / total_tasks) * 100
+        )
+
+    context = {
+
+        "total_tasks": total_tasks,
+        "completed_tasks": completed_tasks,
+        "pending_tasks": pending_tasks,
+        "overdue_tasks": overdue_tasks,
+        "progress": progress,
+
+    }
+
+    return render(
+        request,
+        "tasks/profile.html",
+        context
+    )
