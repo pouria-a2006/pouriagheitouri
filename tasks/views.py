@@ -7,6 +7,8 @@ from .forms import TaskForm
 from datetime import date
 from datetime import datetime
 import random
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
 
 
 @login_required(login_url='login')
@@ -290,3 +292,45 @@ def profile(request):
         "tasks/profile.html",
         context
     )
+
+
+@login_required(login_url='login')
+def export_pdf(request):
+
+    response = HttpResponse(
+        content_type='application/pdf'
+    )
+
+    response['Content-Disposition'] = 'attachment; filename="tasks.pdf"'
+
+    p = canvas.Canvas(response)
+
+    p.setFont("Helvetica", 14)
+
+    p.drawString(200, 800, "Task List")
+
+    y = 760
+
+    tasks = Task.objects.filter(user=request.user)
+
+    for task in tasks:
+
+        status = "Done" if task.completed else "Pending"
+
+        p.drawString(
+            50,
+            y,
+            f"{task.title} | {status}"
+        )
+
+        y -= 25
+
+        if y < 50:
+
+            p.showPage()
+
+            y = 800
+
+    p.save()
+
+    return response

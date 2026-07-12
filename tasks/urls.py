@@ -10,4 +10,5 @@ urlpatterns = [
     path('calendar/', views.calendar_view, name='calendar'),
     path('calendar/events/', views.calendar_events, name='calendar_events'),
     path('profile/', views.profile, name='profile'),
+    path("export-pdf/", views.export_pdf, name="export_pdf"),
 ]
