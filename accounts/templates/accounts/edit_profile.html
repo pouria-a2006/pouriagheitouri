@@ -1,41 +1,28 @@
 {% extends "base.html" %}
-
 {% block content %}
-
 <div class="container mt-5">
-
     <div class="card shadow">
-
         <div class="card-body">
-
             <h2 class="mb-4">
                 ✏️ Edit Profile
             </h2>
-
-            <form method="POST">
-
+            <div class="text-center mb-4">
+                <img src="{{ request.user.profile.image.url }}"
+                     alt="Profile picture"
+                     style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #764ba2;">
+            </div>
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-
                 {{ form.as_p }}
-
+                {{ image_form.as_p }}
                 <button class="btn btn-success">
-
                     Save Changes
-
                 </button>
-
                 <a href="{% url 'profile' %}" class="btn btn-secondary">
-
                     Cancel
-
                 </a>
-
             </form>
-
         </div>
-
     </div>
-
 </div>
-
 {% endblock %}

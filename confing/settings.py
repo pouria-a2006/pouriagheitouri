@@ -99,6 +99,9 @@ USE_TZ = True
 # 📁 STATIC FILES (مهم برای Render)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+# 🖼 MEDIA FILES (عکس پروفایل و آپلودها)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # 🔑 DEFAULT AUTO FIELD
