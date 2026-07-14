@@ -6,11 +6,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-light">
+<body style="min-height: 100vh; display: flex; align-items: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
 
-<div class="container mt-5" style="max-width: 400px;">
+<div class="container" style="max-width: 400px; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
 
-    <h2 class="text-center mb-4">🔐 ورود</h2>
+    <h2 class="text-center mb-4">welcome to pouria site </h2>
 
     {% if error %}
         <div class="alert alert-danger">{{ error }}</div>
@@ -19,21 +19,21 @@
     <form method="POST">
         {% csrf_token %}
 
-        <input type="text" name="username" class="form-control mb-3" placeholder="نام کاربری">
+        <input type="text" name="username" class="form-control mb-3" placeholder="username">
 
-        <input type="password" name="password" class="form-control mb-3" placeholder="رمز عبور">
+        <input type="password" name="password" class="form-control mb-3" placeholder="password">
 
-        <button class="btn btn-primary w-100">ورود</button>
+        <button class="btn btn-primary w-100">Sign in</button>
     </form>
 
     <p class="text-center mt-3">
-        حساب نداری؟
-        <a href="/accounts/register/">ثبت‌نام</a>
+        ؟
+        <a href="/accounts/register/">sign up</a>
     </p>
     <div class="alert alert-info text-center mt-3">
         <strong>👀 مشاهده نمونه‌کار؟</strong><br>
         برای تست سریع از حساب دمو استفاده کنید:<br>
-        نام کاربری: <code>demo</code> &nbsp; | &nbsp; رمز عبور: <code>demo12345</code>
+        username: <code>demo</code> &nbsp; | &nbsp;password: <code>demo12345</code>
     </div>
 
 </div>
