@@ -9,6 +9,7 @@ from datetime import datetime
 import random
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
+import openpyxl
 
 
 @login_required(login_url='login')
@@ -332,5 +333,38 @@ def export_pdf(request):
             y = 800
 
     p.save()
+
+    return response
+
+@login_required(login_url='login')
+def export_excel(request):
+
+    tasks = Task.objects.filter(user=request.user)
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = "Tasks"
+
+    headers = ["Title", "Description", "Priority", "Status", "Due Date"]
+    sheet.append(headers)
+
+    for task in tasks:
+        status = "Done" if task.completed else "Pending"
+        due_date = task.due_date.strftime("%Y-%m-%d") if task.due_date else ""
+
+        sheet.append([
+            task.title,
+            task.description,
+            task.priority,
+            status,
+            due_date,
+        ])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename="tasks.xlsx"'
+
+    workbook.save(response)
 
     return response
